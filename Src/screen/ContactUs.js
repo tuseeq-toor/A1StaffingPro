@@ -3,17 +3,66 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 import {windowWidth} from '../utils/Dimentions';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import A1logo from '../assets/A1logo.png';
 import Theme from '../utils/Theme';
+import axios from 'axios';
 const ContactUs = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setisSubmitting] = useState(false);
+
+  const submitForm = async () => {
+    if (
+      name == '' &&
+      email == '' &&
+      phone == '' &&
+      subject == '' &&
+      message == ''
+    ) {
+      Alert.alert('Information Required', 'Please fill in all the details.');
+    } else {
+      const contactObject = {
+        name: name,
+        email: email,
+        phone: phone,
+        subject: subject,
+        message: message,
+      };
+      setisSubmitting(true);
+      console.log(contactObject);
+      axios
+        .post(
+          'https://agile-river-27056.herokuapp.com/send-contact-mail',
+          contactObject,
+        )
+        .then(function (response) {
+          if (response.data.success == true) {
+            setisSubmitting(false);
+            Alert.alert(
+              'Request Sent',
+              "Your request has been received. We'll contact you soon.",
+            );
+          }
+          console.log(response.data, 'data');
+        })
+        .catch(function (error) {
+          console.log(error);
+          Alert.alert('Something Went Wrong!', 'Please try again later');
+        });
+    }
+  };
+
   return (
     <View
       style={{flex: 1, width: windowWidth, backgroundColor: Theme.whiteColor}}>
@@ -31,6 +80,7 @@ const ContactUs = () => {
 
         <TextInput
           placeholder="Your Name"
+          onChangeText={e => setName(e)}
           placeholderTextColor={Theme.blackColor}
           style={{
             width: '90%',
@@ -44,6 +94,7 @@ const ContactUs = () => {
 
         <TextInput
           placeholder="Your Email"
+          onChangeText={e => setEmail(e)}
           placeholderTextColor={Theme.blackColor}
           style={{
             width: '90%',
@@ -57,6 +108,7 @@ const ContactUs = () => {
 
         <TextInput
           placeholder="Your Phone Number"
+          onChangeText={e => setPhone(e)}
           placeholderTextColor={Theme.blackColor}
           style={{
             width: '90%',
@@ -70,6 +122,7 @@ const ContactUs = () => {
 
         <TextInput
           placeholder="Subject"
+          onChangeText={e => setSubject(e)}
           placeholderTextColor={Theme.blackColor}
           style={{
             width: '90%',
@@ -83,6 +136,7 @@ const ContactUs = () => {
 
         <TextInput
           placeholder="Message"
+          onChangeText={e => setMessage(e)}
           numberOfLines={10}
           placeholderTextColor={Theme.blackColor}
           style={{
@@ -96,6 +150,7 @@ const ContactUs = () => {
         />
 
         <TouchableOpacity
+          onPress={submitForm}
           style={{
             width: '35%',
             height: 50,
@@ -113,7 +168,7 @@ const ContactUs = () => {
               fontSize: 18,
               height: '100%',
             }}>
-            Submit
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </Text>
         </TouchableOpacity>
 
