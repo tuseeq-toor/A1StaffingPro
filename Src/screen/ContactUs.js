@@ -24,11 +24,11 @@ const ContactUs = () => {
 
   const submitForm = async () => {
     if (
-      name == '' &&
-      email == '' &&
-      phone == '' &&
-      subject == '' &&
-      message == ''
+      name === '' &&
+      email === '' &&
+      phone === '' &&
+      subject === '' &&
+      message === ''
     ) {
       Alert.alert('Information Required', 'Please fill in all the details.');
     } else {
