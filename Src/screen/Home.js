@@ -72,7 +72,7 @@ const Home = ({navigation}) => {
                 textAlignVertical: 'center',
                 fontSize: 16,
               }}>
-              FOR BUSINESS
+              For Employers to Hire a Talent
             </Text>
           </TouchableOpacity>
 
@@ -97,7 +97,7 @@ const Home = ({navigation}) => {
                 textAlignVertical: 'center',
                 fontSize: 16,
               }}>
-              FOR JOB SEEKERS
+              Submit Your Resume
             </Text>
           </TouchableOpacity>
         </View>
